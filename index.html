@@ -1,0 +1,175 @@
+<html>
+<head>
+	<title> Furmon</title>
+<style>
+body {
+margin: 0px;
+padding: 0px;
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+
+
+var intervalID = window.setInterval(readfiles, 100);
+var fstat="Demo";
+var ltime;
+var ray = ["A","b","c","d","e","f","g","h","I","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","Z",7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0];
+
+function readfiles(){
+
+				$.get("data", function(data, status){
+							//alert("Data: " + data + "\nStatus: " + status);
+							y=data.split("\n");
+							z=y[0].split("");
+							z.reverse();
+							fstat=y[1];
+							ltime=y[2];
+							for (i=0; i<z.length; i++ ){
+								ray.unshift(z[i]);
+								ray=ray.splice(0,80);
+							}
+						drawAll(context,ray);
+						});
+
+
+		}
+
+
+</script>
+
+</head>
+
+<body  >
+	<center>
+<h1>Furmon</h1>
+<canvas id="myCanvas" width="600" height="300"></canvas>
+<!-- Debug <h2>Raw Array</h2>
+<p id="demo"></p>
+-->
+<script>
+
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+context.font="30px Courier New";
+context.lineWidth = 5;
+grd=context.createLinearGradient(0,0,0,350);
+	grd.addColorStop(0,"green");
+	grd.addColorStop(1,"white");
+grd2=context.createLinearGradient(0,0,0,350);
+	grd2.addColorStop(1,"green");
+	grd2.addColorStop(0,"white");
+
+
+//context.fillStyle=grd;
+context.strokeStyle=grd2;
+
+
+function tmp(){
+			context.clearRect(30,30,545,160);
+			autoArray(context,ray);
+			document.getElementById("demo").innerHTML = ray;
+
+}
+function ssplit(){
+	x=document.getElementById('textfield1').value;
+	y=x.split("");
+	y.reverse();
+
+	for (i=0; i<y.length; i++ ){
+		ray.unshift(y[i]);
+		ray=ray.splice(0,80)
+	}
+	context.clearRect(30,30,545,160);
+	autoArray(context,ray);
+	//document.getElementById("demo").innerHTML = ray;
+
+}
+
+//Draw Display
+
+//Draw outline of display
+function drawOutline(context){
+
+	context.fillRect(10,10,585,285);
+	context.clearRect(20,20,565,265);
+	context.strokeRect(20,20,565,265);
+
+	//Draw Display outline
+	context.strokeRect(30,30,545,165);
+}
+
+//Manual Draw Array character places 4*20
+function autoArray(ctx,arr){
+	ctx.textBaseline="top";
+	w=5;
+	buffer=21.5;
+	hpb=40;
+	l=1;
+	z=0;
+	vpb=10;
+	vb=30;
+	for	(index = 0; index < 20; index++) {
+		ctx.fillText(arr[index],hpb+(buffer+w)*z,vpb+(vb)*l);
+		z++;
+}
+l=2;
+z=0;
+for	(index = 20; index < 40; index++) {
+
+	ctx.fillText(arr[index],hpb+(buffer+w)*z,vpb+(vb)*l);
+	z++;
+}
+l=3;
+z=0;
+for	(index = 40; index < 60; index++) {
+	ctx.fillText(arr[index],hpb+(buffer+w)*z,vpb+(vb)*l);
+	z++;
+}
+l=4;
+z=0;
+for	(index = 60; index < 80; index++) {
+	ctx.fillText(arr[index],hpb+(buffer+w)*z,vpb+(vb)*l);
+	z++;
+}
+
+}
+
+//debug context.strokeRect(160,220,50,50); //add 35
+//debug-math 480* 50 (585-240)/2
+//debug context.strokeRect(172.5,220,240,50);
+function drawButtons(ctx, lut){
+	//Label for Furmon Status
+
+	ctx.fillText("Furmon Status: ",50,220);
+	// Dynamically Filled Status
+	ctx.fillText(fstat, 320,220);
+	//Label for last update time
+	ctx.fillText("Last   Update: ",50,250);
+		//Dynamically Filled Last Update Time
+	ctx.fillText(lut + " Secs", 320,250);
+
+	//ctx.strokeRect( 172.5,220,50,50);
+	//Buttons - Button 2
+
+}
+
+function drawAll(context,ray){
+var millis = (new Date).getTime()/1000;
+var ms=millis.toString();
+dt=parseInt(ms-ltime);
+	drawOutline(context);
+	autoArray(context,ray);
+	drawButtons(context,dt);
+
+}
+
+
+//document.getElementById("demo").innerHTML = ray;
+
+// save canvas image as data url (png format by default)
+var dataURL = canvas.toDataURL();
+</script>
+</center>
+</body>
+</html>
